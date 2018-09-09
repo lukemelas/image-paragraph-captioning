@@ -1,24 +1,30 @@
 ## Training for Diversity in Image Paragraph Captioning
 
-This repository includes a PyTorch implementation of [Training for Diversity in Image Paragraph Captioning](). 
+This repository includes a PyTorch implementation of [Training for Diversity in Image Paragraph Captioning](). Our code is based on Ruotian Luo's implementation of [Self-critical Sequence Training for Image Captioning](https://arxiv.org/abs/1612.00563), available [here.](https://github.com/ruotianluo/self-critical.pytorch). 
 
-The code is based on Ruotian Luo's implementation of [Self-critical Sequence Training for Image Captioning](https://arxiv.org/abs/1612.00563), available [here.](https://github.com/ruotianluo/self-critical.pytorch). 
+### Requirements
+* Python 2.7 (because coco-caption does not support Python 3)
+* PyTorch 0.4 (along with torchvision)
+* cider (already included as a submodule)
+* coco-caption (already included as a submodule)
 
-## Requirements
-Python 3
-PyTorch 0.4 (along with torchvision)
-cider (already been added as a submodule)
 
-(**Skip if you are using bottom-up feature**): If you want to use resnet to extract image features, you need to download pretrained resnet model for both training and evaluation. The models can be downloaded from [here](https://drive.google.com/open?id=0B7fNdx_jAqhtbVYzOURMdDNHSGM), and should be placed in `data/imagenet_weights`.
+To clone this repository with submodules, use:
+`git clone --recurse-submodules https://github.com/lukemelas/image-paragraph-captioning`
 
-## Pretrained models (using resnet101 feature)
-Pretrained models are provided [here](https://drive.google.com/open?id=0B7fNdx_jAqhtdE1JRXpmeGJudTg). And the performances of each model will be maintained in this [issue](https://github.com/ruotianluo/neuraltalk2.pytorch/issues/10).
+### Train your own network
 
-If you want to do evaluation only, you can then follow [this section](#generate-image-captions) after downloading the pretrained models (and also the pretrained resnet101).
+#### Download and preprocess cations
 
-## Train your own network on COCO
+* Download captions:
+  *  Run `download.sh` in `data/raw_captions`
+* Preprocess captions for training: 
+  * 
 
-### Download COCO captions and preprocess them
+* Preprocess captions into a coco-captions format for calculating CIDER/BLEU/etc: 
+  *  Run 'scripts/prepro_captions.py'
+  *  There should be 14,575/2487/2489 images and annotations in the train/val/test splits
+* 
 
 Download preprocessed coco captions from [link](http://cs.stanford.edu/people/karpathy/deepimagesent/caption_datasets.zip) from Karpathy's homepage. Extract `dataset_coco.json` from the zip file and copy it in to `data/`. This file provides preprocessed captions and also standard train-val-test splits.
 
