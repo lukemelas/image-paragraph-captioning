@@ -7,7 +7,7 @@ This repository includes a PyTorch implementation of [Training for Diversity in 
 * PyTorch 0.4 (along with torchvision)
 * cider (already included as a submodule)
 * coco-caption (already included as a submodule)
-
+* spacy (if training from scratch, to tokenize words)
 
 To clone this repository with submodules, use:
 `git clone --recurse-submodules https://github.com/lukemelas/image-paragraph-captioning`
@@ -19,7 +19,8 @@ To clone this repository with submodules, use:
 * Download captions:
   *  Run `download.sh` in `data/raw_captions`
 * Preprocess captions for training: 
-  * 
+  * Download `spacy` English tokenizer with `python -m spacy download en`
+  * Run 'scripts/prepro_text.py'
 
 * Preprocess captions into a coco-captions format for calculating CIDER/BLEU/etc: 
   *  Run 'scripts/prepro_captions.py'
