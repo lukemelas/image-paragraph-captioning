@@ -1,6 +1,10 @@
 from __future__ import print_function
 import sys, os
 import json
+import spacy
+
+# Import spacy tokenizer
+spacy_en = spacy.load('en')
 
 # Caption data directory
 data = '../data/captions/'
@@ -40,7 +44,7 @@ def tokenize_and_reformat(para_json):
 
         # Log
         if imgid % 1000 == 0:
-        print('{}/{}'.format(imgid, len(para_json)))
+            print('{}/{}'.format(imgid, len(para_json)))
 
         # Extract info
         url      = item['url']                 # original url
@@ -95,6 +99,7 @@ def tokenize_and_reformat(para_json):
     return paragraph_json
 
 if __name__ == '__main__':
+    print('This will take a couple of minutes.')
     paragraph_json = tokenize_and_reformat(para_json)
     outfile = os.path.join(data, 'para_karpathy_format.json')
     with open(outfile, 'w') as f:

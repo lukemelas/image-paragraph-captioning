@@ -10,22 +10,25 @@ This repository includes a PyTorch implementation of [Training for Diversity in 
 * spacy (if training from scratch, to tokenize words)
 
 To clone this repository with submodules, use:
-`git clone --recurse-submodules https://github.com/lukemelas/image-paragraph-captioning`
+* `git clone --recurse-submodules https://github.com/lukemelas/image-paragraph-captioning`
 
 ### Train your own network
-
 #### Download and preprocess cations
 
 * Download captions:
   *  Run `download.sh` in `data/raw_captions`
-* Preprocess captions for training: 
+* Preprocess captions for training (part 1): 
   * Download `spacy` English tokenizer with `python -m spacy download en`
-  * Run 'scripts/prepro_text.py'
-
+  * First, convert the text into tokens: 'scripts/prepro_text.py'
+  * Next, preprocess the tokens into a vocabulary (and map infrequent words to an `UNK` token):
+  * ```python scripts/prepro_labels.py --input_json data/para_karpathy_format.json --output_json data/paratalk.json --output_h5 data/paratalk
+  * Note that image/vocab information is stored in `data/paratalk.json` and caption data is stored in `data/paratalk_label`
 * Preprocess captions into a coco-captions format for calculating CIDER/BLEU/etc: 
   *  Run 'scripts/prepro_captions.py'
   *  There should be 14,575/2487/2489 images and annotations in the train/val/test splits
-* 
+* Extract image features using an object detector
+  * Generate the image features by downloading the [Visual Genome Dataset](https://visualgenome.org/api/v0/api_home.html) and applying the bottom-up attention object detector [here](https://github.com/peteanderson80/bottom-up-attention) made by Peter Anderson.
+  * These image features should be in the format of a 
 
 Download preprocessed coco captions from [link](http://cs.stanford.edu/people/karpathy/deepimagesent/caption_datasets.zip) from Karpathy's homepage. Extract `dataset_coco.json` from the zip file and copy it in to `data/`. This file provides preprocessed captions and also standard train-val-test splits.
 
