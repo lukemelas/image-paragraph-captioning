@@ -2,5 +2,5 @@
 	path = cider
 	url = https://github.com/ruotianluo/cider.git
 [submodule "coco-caption"]
-    path = coco-caption
-    url = https://github.com/tylin/coco-caption
+	path = coco-caption
+	url = https://github.com/tylin/coco-caption
