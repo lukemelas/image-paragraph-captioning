@@ -4,10 +4,14 @@ This repository includes a PyTorch implementation of [Training for Diversity in 
 
 ### Requirements
 * Python 2.7 (because coco-caption does not support Python 3)
-* PyTorch 0.4 (along with torchvision)
+* PyTorch 0.4 (with torchvision)
 * cider (already included as a submodule)
 * coco-caption (already included as a submodule)
-* spacy (if training from scratch, to tokenize words)
+
+If training from scratch, you also need:
+* spacy (to tokenize words)
+* h5py (to store features)
+* scikit-image (to process images) 
 
 To clone this repository with submodules, use:
 * `git clone --recurse-submodules https://github.com/lukemelas/image-paragraph-captioning`
@@ -20,19 +24,44 @@ To clone this repository with submodules, use:
 * Preprocess captions for training (part 1): 
   * Download `spacy` English tokenizer with `python -m spacy download en`
   * First, convert the text into tokens: 'scripts/prepro\_text.py'
-  * Next, preprocess the tokens into a vocabulary (and map infrequent words to an `UNK` token):
-  * ```python scripts/prepro_labels.py --input_json data/para_karpathy_format.json --output_json data/paratalk.json --output_h5 data/paratalk```
-  * Note that image/vocab information is stored in `data/paratalk.json` and caption data is stored in `data/paratalk_label`
+  * Next, preprocess the tokens into a vocabulary (and map infrequent words to an `UNK` token): 
+```bash
+python scripts/prepro_labels.py --input_json data/captions/para_karpathy_format.json --output_json data/paratalk.json --output_h5 data/paratalk
+```
+  * Note that image/vocab information is stored in `data/paratalk.json` and caption data is stored in `data/paratalk\_label.h5`
 * Preprocess captions into a coco-captions format for calculating CIDER/BLEU/etc: 
-  *  Run 'scripts/prepro_captions.py'
+  *  Run 'scripts/prepro\_captions.py'
   *  There should be 14,575/2487/2489 images and annotations in the train/val/test splits
 * Extract image features using an object detector
-  * Generate the image features by downloading the [Visual Genome Dataset](https://visualgenome.org/api/v0/api_home.html) and applying the bottom-up attention object detector [here](https://github.com/peteanderson80/bottom-up-attention) made by Peter Anderson.
-  * These image features should be in the format of a 
+  * We make pre-processed features widely available:
+    * Download and extract `parabu_fc` and `parabu_att` from [here](https://drive.google.com/drive/folders/1lgdHmU6osXt4BObnhHS6tPqnkedwnHLD?usp=sharing) into `data/bu_data` 
+  * Or generate the features yourself:
+    * Download the [Visual Genome Dataset](https://visualgenome.org/api/v0/api_home.html)
+    * Apply the bottom-up attention object detector [here](https://github.com/peteanderson80/bottom-up-attention) made by Peter Anderson.
+    * Use `scripts/make_bu_data.py` to convert the image features to `.npz` files for faster data loading
 
-Download preprocessed coco captions from [link](http://cs.stanford.edu/people/karpathy/deepimagesent/caption_datasets.zip) from Karpathy's homepage. Extract `dataset_coco.json` from the zip file and copy it in to `data/`. This file provides preprocessed captions and also standard train-val-test splits.
+#### Train the network
 
-Then do:
+As explained in [Self-Critical Sequence Training](https://arxiv.org/abs/1612.00563), training occurs in two steps:
+1. The model is trained with a cross-entropy loss (30 epochs)
+2. The model is trained with a self-critical loss (30+ epochs)
+
+Training hyperparameters may be accessed with `python main.py --help`. 
+
+For example, the following command trains with cross-entropy:
+```bash 
+nw
+```
+
+And the following command trains with self-critical:
+```bash
+nw
+```
+
+
+
+
+
 
 ```bash
 $ python scripts/prepro_labels.py --input_json data/dataset_coco.json --output_json data/cocotalk.json --output_h5 data/cocotalk
