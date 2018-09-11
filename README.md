@@ -60,7 +60,7 @@ nw
 
 
 
-
+<!--
 
 ```bash
 $ python scripts/prepro_labels.py --input_json data/dataset_coco.json --output_json data/cocotalk.json --output_h5 data/cocotalk
@@ -206,3 +206,5 @@ Of course, please cite the original paper of models you are using (You can find 
 ## Acknowledgements
 
 Thanks the original [neuraltalk2](https://github.com/karpathy/neuraltalk2) and awesome PyTorch team.
+
+-->
