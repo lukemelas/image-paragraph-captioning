@@ -24,11 +24,10 @@ To clone this repository with submodules, use:
 * Preprocess captions for training (part 1): 
   * Download `spacy` English tokenizer with `python -m spacy download en`
   * First, convert the text into tokens: 'scripts/prepro\_text.py'
-  * Next, preprocess the tokens into a vocabulary (and map infrequent words to an `UNK` token): 
+  * Next, preprocess the tokens into a vocabulary (and map infrequent words to an `UNK` token) with the following command. Note that image/vocab information is stored in `data/paratalk.json` and caption data is stored in `data/paratalk\_label.h5`
 ```bash
 python scripts/prepro_labels.py --input_json data/captions/para_karpathy_format.json --output_json data/paratalk.json --output_h5 data/paratalk
 ```
-  * Note that image/vocab information is stored in `data/paratalk.json` and caption data is stored in `data/paratalk\_label.h5`
 * Preprocess captions into a coco-captions format for calculating CIDER/BLEU/etc: 
   *  Run 'scripts/prepro\_captions.py'
   *  There should be 14,575/2487/2489 images and annotations in the train/val/test splits
@@ -50,7 +49,7 @@ Training hyperparameters may be accessed with `python main.py --help`.
 
 For example, the following command trains with cross-entropy:
 ```bash 
-nw
+python train.py --id xe --input_json data/paratalk.json --input_fc_dir data/parabu_fc --input_att_dir data/parabu_att --input_label_h5 data/paratalk_label.h5 --batch_size 10 --learning_rate 5e-4 --learning_rate_decay_start 0 --scheduled_sampling_start 0 --checkpoint_path log_xe --save_checkpoint_every 6000 --val_images_use 5000 --max_epochs 30
 ```
 
 And the following command trains with self-critical:

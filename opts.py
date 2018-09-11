@@ -2,6 +2,7 @@ import argparse
 
 def parse_opt():
     parser = argparse.ArgumentParser()
+
     # Data input settings
     parser.add_argument('--input_json', type=str, default='data/coco.json',
                     help='path to the json file containing additional info and vocab')
@@ -24,6 +25,8 @@ def parse_opt():
                     help='Cached token file for calculating cider score during self critical training.')
 
     # Model settings
+    parser.add_argument('--alpha', type=int, default=0.0,
+                    help='repetition-blocking hyperparameter')
     parser.add_argument('--rnn_size', type=int, default=512,
                     help='size of the rnn in number of hidden nodes in each layer')
     parser.add_argument('--num_layers', type=int, default=1,
@@ -40,18 +43,10 @@ def parse_opt():
                     help='2048 for resnet, 512 for vgg')
     parser.add_argument('--logit_layers', type=int, default=1,
                     help='number of layers in the RNN')
-
-
     parser.add_argument('--use_bn', type=int, default=0,
                     help='If 1, then do batch_normalization first in att_embed, if 2 then do bn both in the beginning and the end of att_embed')
-
-    # feature manipulation
     parser.add_argument('--norm_att_feat', type=int, default=0,
                     help='If normalize attention features')
-    parser.add_argument('--use_box', type=int, default=0,
-                    help='If use box features')
-    parser.add_argument('--norm_box_feat', type=int, default=0,
-                    help='If use box, do we normalize box feature')
 
     # Optimization: General
     parser.add_argument('--max_epochs', type=int, default=-1,
@@ -69,7 +64,7 @@ def parse_opt():
     parser.add_argument('--beam_size', type=int, default=1,
                     help='used when sample_max = 1, indicates number of beams in beam search. Usually 2 or 3 works well. More is not better. Set this to 1 for faster runtime but a bit worse performance.')
 
-    #Optimization: for the Language Model
+    # Optimization: Language Model
     parser.add_argument('--optim', type=str, default='adam',
                     help='what update to use? rmsprop|sgd|sgdmom|adagrad|adam')
     parser.add_argument('--learning_rate', type=float, default=4e-4,
@@ -113,14 +108,14 @@ def parse_opt():
     parser.add_argument('--load_best_score', type=int, default=1,
                     help='Do we load previous best score when resuming training.')       
 
-    # misc
+    # Misc
     parser.add_argument('--id', type=str, default='',
                     help='an id identifying this run/job. used in cross-val and appended when writing progress files')
     parser.add_argument('--train_only', type=int, default=0,
                     help='if true then use 80k, else use 110k')
 
 
-    # Reward
+    # SCST Reward
     parser.add_argument('--cider_reward_weight', type=float, default=1,
                     help='The reward weight from cider')
     parser.add_argument('--bleu_reward_weight', type=float, default=0,

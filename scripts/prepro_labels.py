@@ -166,8 +166,8 @@ if __name__ == "__main__":
   parser.add_argument('--images_root', default='', help='root location in which images are stored, to be prepended to file_path in input json')
 
   # options
-  parser.add_argument('--max_length', default=16, type=int, help='max length of a caption, in number of words. captions longer than this get clipped.')
-  parser.add_argument('--word_count_threshold', default=5, type=int, help='only words that occur more than this number of times will be put in vocab')
+  parser.add_argument('--max_length', default=175, type=int, help='max length of a caption, in number of words. captions longer than this get clipped.')
+  parser.add_argument('--word_count_threshold', default=4, type=int, help='only words that occur more than this number of times will be put in vocab')
 
   args = parser.parse_args()
   params = vars(args) # convert to ordinary dict
