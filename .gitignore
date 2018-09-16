@@ -2,3 +2,8 @@
 *.npz
 *.npy
 *.h5
+*.p
+*.pyc
+__pycache__/
+log*
+copies/

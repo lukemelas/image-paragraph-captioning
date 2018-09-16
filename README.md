@@ -29,8 +29,13 @@ To clone this repository with submodules, use:
 python scripts/prepro_labels.py --input_json data/captions/para_karpathy_format.json --output_json data/paratalk.json --output_h5 data/paratalk
 ```
 * Preprocess captions into a coco-captions format for calculating CIDER/BLEU/etc: 
-  *  Run 'scripts/prepro\_captions.py'
+  *  Run `scripts/prepro\_captions.py`
   *  There should be 14,575/2487/2489 images and annotations in the train/val/test splits
+  *  Uncomment line 44 (`(Spice(), "SPICE")`) in `coco-caption/pycocoevalcap/eval.py` to disable Spice testing
+* Preprocess ngrams for self-critical training:
+```bash
+python scripts/prepro_ngrams.py --input_json data/captions/para_karpathy_format.json --dict_json data/paratalk.json --output_pkl data/para_train --split train
+```
 * Extract image features using an object detector
   * We make pre-processed features widely available:
     * Download and extract `parabu_fc` and `parabu_att` from [here](https://drive.google.com/drive/folders/1lgdHmU6osXt4BObnhHS6tPqnkedwnHLD?usp=sharing) into `data/bu_data` 
@@ -52,9 +57,18 @@ For example, the following command trains with cross-entropy:
 python train.py --id xe --input_json data/paratalk.json --input_fc_dir data/parabu_fc --input_att_dir data/parabu_att --input_label_h5 data/paratalk_label.h5 --batch_size 10 --learning_rate 5e-4 --learning_rate_decay_start 0 --scheduled_sampling_start 0 --checkpoint_path log_xe --save_checkpoint_every 6000 --val_images_use 5000 --max_epochs 30
 ```
 
-And the following command trains with self-critical:
+You can then copy the model:
 ```bash
-nw
+./scripts/copy_model.sh xe sc
+```
+
+And train with self-critical:
+```bash
+./scripts/copy_model.sh xe sc
+```
+
+```bash
+python train.py --id sc --input_json data/paratalk.json --input_fc_dir data/parabu_fc --input_att_dir data/parabu_att --input_label_h5 data/paratalk_label.h5 --batch_size 16 --learning_rate 5e-5 --start_from log_sc --checkpoint_path log_sc --save_checkpoint_every 6000 --language_eval 1 --val_images_use 5000 --self_critical_after 28
 ```
 
 

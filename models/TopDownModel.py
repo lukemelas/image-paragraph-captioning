@@ -177,6 +177,7 @@ class AttModel(CaptionModel):
     def _sample(self, fc_feats, att_feats, att_masks=None, opt={}):
 
         alpha = opt.get('alpha', 0.0)
+        block_trigrams = opt.get('block_trigrams', 0)
         sample_max = opt.get('sample_max', 1)
         beam_size = opt.get('beam_size', 1)
         temperature = opt.get('temperature', 1.0)

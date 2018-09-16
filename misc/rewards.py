@@ -16,7 +16,6 @@ from pycocoevalcap.bleu.bleu import Bleu
 
 CiderD_scorer = None
 Bleu_scorer = None
-#CiderD_scorer = CiderD(df='corpus')
 
 def init_scorer(cached_tokens):
     global CiderD_scorer

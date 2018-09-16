@@ -152,6 +152,8 @@ def main(params):
 
     out['images'].append(jimg)
   
+  # remove 2 entries for which we do not have images
+  out['images'] = [x for x in out['images'] if x['id'] not in [2346046, 2341671]]
   json.dump(out, open(params['output_json'], 'w'))
   print('wrote ', params['output_json'])
 

@@ -21,12 +21,14 @@ def parse_opt():
                                               Note: this file contains absolute paths, be careful when moving files around;
                         'model.ckpt-*'      : file(s) with model definition (created by tf)
                     """)
-    parser.add_argument('--cached_tokens', type=str, default='coco-train-idxs',
+    parser.add_argument('--cached_tokens', type=str, default='para_train-idxs',
                     help='Cached token file for calculating cider score during self critical training.')
 
     # Model settings
-    parser.add_argument('--alpha', type=int, default=0.0,
-                    help='repetition-blocking hyperparameter')
+    parser.add_argument('--block_trigrams', type=int, default=0,
+                    help='flag to block trigrams (0=F, 1=T), default 0')
+    parser.add_argument('--alpha', type=float, default=0.0,
+                    help='repetition-blocking hyperparameter, default 0.0')
     parser.add_argument('--rnn_size', type=int, default=512,
                     help='size of the rnn in number of hidden nodes in each layer')
     parser.add_argument('--num_layers', type=int, default=1,
@@ -59,7 +61,7 @@ def parse_opt():
                     help='strength of dropout in the Language Model RNN')
     parser.add_argument('--self_critical_after', type=int, default=-1,
                     help='After what epoch do we start finetuning the CNN? (-1 = disable; never finetune, 0 = finetune from start)')
-    parser.add_argument('--seq_per_img', type=int, default=5,
+    parser.add_argument('--seq_per_img', type=int, default=1,
                     help='number of captions to sample for each image during training. Done for efficiency since CNN forward pass is expensive. E.g. coco has 5 sents/image')
     parser.add_argument('--beam_size', type=int, default=1,
                     help='used when sample_max = 1, indicates number of beams in beam search. Usually 2 or 3 works well. More is not better. Set this to 1 for faster runtime but a bit worse performance.')
@@ -83,7 +85,6 @@ def parse_opt():
                     help='epsilon that goes into denominator for smoothing')
     parser.add_argument('--weight_decay', type=float, default=0,
                     help='weight_decay')
-
     parser.add_argument('--scheduled_sampling_start', type=int, default=-1, 
                     help='at what iteration to start decay gt probability')
     parser.add_argument('--scheduled_sampling_increase_every', type=int, default=5, 
@@ -92,7 +93,6 @@ def parse_opt():
                     help='How much to update the prob')
     parser.add_argument('--scheduled_sampling_max_prob', type=float, default=0.25, 
                     help='Maximum scheduled sampling prob.')
-
 
     # Evaluation/Checkpointing
     parser.add_argument('--val_images_use', type=int, default=3200,
@@ -113,7 +113,6 @@ def parse_opt():
                     help='an id identifying this run/job. used in cross-val and appended when writing progress files')
     parser.add_argument('--train_only', type=int, default=0,
                     help='if true then use 80k, else use 110k')
-
 
     # SCST Reward
     parser.add_argument('--cider_reward_weight', type=float, default=1,

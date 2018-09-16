@@ -3,7 +3,7 @@ import sys, os
 import json
 
 # Caption data directory
-data = '../data/captions/'
+data = 'data/captions/'
 
 # Files
 example_json = os.path.join(data, 'captions_val2014.json')
@@ -13,7 +13,7 @@ val_split = os.path.join(data, 'val_split.json')
 test_split = os.path.join(data, 'test_split.json')
 
 # Output files (should be coco-caption directory)
-coco_captions = '../coco-caption/annotations/' 
+coco_captions = 'coco-caption/annotations/' 
 train_outfile = os.path.join(coco_captions, 'para_captions_train.json')
 val_outfile = os.path.join(coco_captions, 'para_captions_val.json')
 test_outfile = os.path.join(coco_captions, 'para_captions_test.json')
@@ -32,21 +32,24 @@ train = {
     'images': [],
     'annotations': [],
     'info': {'description': 'Visual genome paragraph dataset (train split)'},
-    'type': 'captions'
+    'type': 'captions',
+    'licenses': 'http://creativecommons.org/licenses/by/4.0/',
 }
 
 val = {
     'images': [],
     'annotations': [],
     'info': {'description': 'Visual genome paragraph dataset (val split)'},
-    'type': 'captions'
+    'type': 'captions',
+    'licenses': 'http://creativecommons.org/licenses/by/4.0/',
 }
 
 test = {
     'images': [],
     'annotations': [],
     'info': {'description': 'Visual genome paragraph dataset (test split)'},
-    'type': 'captions'
+    'type': 'captions',
+    'licenses': 'http://creativecommons.org/licenses/by/4.0/',
 }
 
 # Loop over images 
@@ -81,7 +84,7 @@ for imgid, item in enumerate(para_json):
     annotation = {
         'image_id': id,
         'id': imgid,
-        'caption': raw_paragraph
+        'caption': raw_paragraph.replace(u'\u00e9', 'e') # There is a single validation caption with the word 'Cafe' w/ accent
     }
 
     # Store info
