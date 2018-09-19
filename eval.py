@@ -41,12 +41,18 @@ parser.add_argument('--dump_json', type=int, default=0,
 parser.add_argument('--dump_path', type=int, default=0,
                 help='Write image paths along with predictions into vis json? (1=yes,0=no)')
 
+# Temp
+parser.add_argument('--block_trigrams', type=int, default=0,
+                help='flag to block trigrams (0=F, 1=T), default 0')
+parser.add_argument('--alpha', type=float, default=0.0,
+                help='repetition-blocking hyperparameter, default 0.0')
+
 # Sampling options
 parser.add_argument('--sample_max', type=int, default=1,
                 help='1 = sample argmax words. 0 = sample from distributions.')
 parser.add_argument('--max_ppl', type=int, default=0,
                 help='beam search by max perplexity or max probability.')
-parser.add_argument('--beam_size', type=int, default=2,
+parser.add_argument('--beam_size', type=int, default=1,
                 help='used when sample_max = 1, indicates number of beams in beam search. Usually 2 or 3 works well. More is not better. Set this to 1 for faster runtime but a bit worse performance.')
 parser.add_argument('--group_size', type=int, default=1,
                 help='used for diverse beam search. if group_size is 1, then it\'s normal beam search')
@@ -66,8 +72,8 @@ parser.add_argument('--input_fc_dir', type=str, default='',
                 help='path to the h5file containing the preprocessed dataset')
 parser.add_argument('--input_att_dir', type=str, default='',
                 help='path to the h5file containing the preprocessed dataset')
-parser.add_argument('--input_box_dir', type=str, default='',
-                help='path to the h5file containing the preprocessed dataset')
+#parser.add_argument('--input_box_dir', type=str, default='',
+#                help='path to the h5file containing the preprocessed dataset')
 parser.add_argument('--input_label_h5', type=str, default='',
                 help='path to the h5file containing the preprocessed dataset')
 parser.add_argument('--input_json', type=str, default='', 
@@ -102,7 +108,7 @@ if opt.batch_size == 0:
     opt.batch_size = infos['opt'].batch_size
 if len(opt.id) == 0:
     opt.id = infos['opt'].id
-ignore = ["id", "batch_size", "beam_size", "start_from", "language_eval"]
+ignore = ["id", "batch_size", "beam_size", "start_from", "language_eval", "block_trigrams", "alpha"]
 for k in vars(infos['opt']).keys():
     if k not in ignore:
         if k in vars(opt):

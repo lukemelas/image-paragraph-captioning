@@ -71,7 +71,10 @@ And train with self-critical:
 python train.py --id sc --input_json data/paratalk.json --input_fc_dir data/parabu_fc --input_att_dir data/parabu_att --input_label_h5 data/paratalk_label.h5 --batch_size 16 --learning_rate 5e-5 --start_from log_sc --checkpoint_path log_sc --save_checkpoint_every 6000 --language_eval 1 --val_images_use 5000 --self_critical_after 28
 ```
 
-
+When finished training, evaluate with:
+```bash
+python eval.py --input_json data/paratalk.json --input_fc_dir data/parabu_fc --input_att_dir data/parabu_att --input_label_h5 data/paratalk_label.h5 --batch_size 16 --split val --model log_sc/model.pth --infos_path log_sc/infos_sc.pkl --id 999 --num_images 5000 --language_eval 1
+```
 
 
 <!--

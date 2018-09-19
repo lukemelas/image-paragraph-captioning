@@ -16,6 +16,8 @@ from torch.nn.utils.rnn import PackedSequence, pack_padded_sequence, pad_packed_
 
 from .CaptionModel import CaptionModel
 
+import pdb
+
 def sort_pack_padded_sequence(input, lengths):
     sorted_lengths, indices = torch.sort(lengths, descending=True)
     tmp = pack_padded_sequence(input[indices], sorted_lengths, batch_first=True)
@@ -193,12 +195,41 @@ class AttModel(CaptionModel):
         # BEG MODIFIED ----------------------------------------------------
         trigrams = [] # will be a list of batch_size dictionaries
         # END MODIFIED ----------------------------------------------------
-                        
+
         seq = fc_feats.new_zeros((batch_size, self.seq_length), dtype=torch.long)
         seqLogprobs = fc_feats.new_zeros(batch_size, self.seq_length)
         for t in range(self.seq_length + 1):
-            if t == 0: # input <bos>
+
+            # input <bos>
+            if t == 0: 
                 it = fc_feats.new_zeros(batch_size, dtype=torch.long)
+
+            # sample the next word
+            else:
+                if t == self.seq_length: # skip if we achieve maximum length
+                    break
+                if sample_max:
+                    sampleLogprobs, it = torch.max(logprobs.data, 1)
+                    it = it.view(-1).long()
+                else:
+                    if temperature == 1.0:
+                        prob_prev = torch.exp(logprobs.data) # fetch prev distribution: shape Nx(M+1)
+                    else:
+                        # scale logprobs by temperature
+                        prob_prev = torch.exp(torch.div(logprobs.data, temperature))
+                    it = torch.multinomial(prob_prev, 1)
+                    sampleLogprobs = logprobs.gather(1, it) # gather the logprobs at sampled positions
+                    it = it.view(-1).long() # and flatten indices for downstream processing
+
+                # stop when all finished
+                unfinished = (it > 0) if t == 1 else unfinished * (it > 0)
+                it = it * unfinished.type_as(it)
+                seq[:,t] = it
+                seqLogprobs[:,t] = sampleLogprobs.view(-1)
+
+                # quit loop if all sequences have finished
+                if unfinished.sum() == 0:
+                    break
 
             logprobs, state = self.get_logprobs_state(it, p_fc_feats, p_att_feats, pp_att_feats, p_att_masks, state)
             
@@ -207,35 +238,7 @@ class AttModel(CaptionModel):
                 tmp.scatter_(1, seq[:,t-1].data.unsqueeze(1), float('-inf'))
                 logprobs = logprobs + tmp
 
-            # sample the next word
-            if t == self.seq_length: # skip if we achieve maximum length
-                break
-            if sample_max:
-                sampleLogprobs, it = torch.max(logprobs.data, 1)
-                it = it.view(-1).long()
-            else:
-                if temperature == 1.0:
-                    prob_prev = torch.exp(logprobs.data) # fetch prev distribution: shape Nx(M+1)
-                else:
-                    # scale logprobs by temperature
-                    prob_prev = torch.exp(torch.div(logprobs.data, temperature))
-                it = torch.multinomial(prob_prev, 1)
-                sampleLogprobs = logprobs.gather(1, it) # gather the logprobs at sampled positions
-                it = it.view(-1).long() # and flatten indices for downstream processing
-
-            # stop when all finished
-            if t == 0:
-                unfinished = it > 0
-            else:
-                unfinished = unfinished * (it > 0)
-            it = it * unfinished.type_as(it)
-            seq[:,t] = it
-            seqLogprobs[:,t] = sampleLogprobs.view(-1)
-            # quit loop if all sequences have finished
-            if unfinished.sum() == 0:
-                break
-
-            # BEG MODIFIED ----------------------------------------------------
+             # BEG MODIFIED ----------------------------------------------------
 
             # Mess with trigrams
             if block_trigrams and t >= 3 and sample_max:
@@ -260,11 +263,16 @@ class AttModel(CaptionModel):
                         for j in trigrams[i][prev_two]:
                             mask[i,j] += 1
                 # Apply mask to log probs
+                old_logprobs = logprobs.clone()
+                
                 logprobs = logprobs + (mask * -0.693 * alpha) # ln(1/2)
+
+                #if torch.sum(torch.abs(logprobs - old_logprobs)) > 1e-5:
+                #    pdb.set_trace()
 
             # END MODIFIED ----------------------------------------------------i
 
-        return seq, seqLogprobs
+        return seq[:,1:], seqLogprobs[:,1:]
 
 class TopDownCore(nn.Module):
     def __init__(self, opt, use_maxout=False):

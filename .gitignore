@@ -4,6 +4,7 @@
 *.h5
 *.p
 *.pyc
+*.out
 __pycache__/
 log*
 copies/
