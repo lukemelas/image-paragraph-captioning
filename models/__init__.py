@@ -9,7 +9,7 @@ import numpy as np
 import misc.utils as utils
 import torch
 
-from .TopDownModel import TopDownModel
+from .AttModel import TopDownModel
 
 def setup(opt):
     model = TopDownModel(opt)
