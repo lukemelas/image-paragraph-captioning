@@ -50,7 +50,7 @@ As explained in [Self-Critical Sequence Training](https://arxiv.org/abs/1612.005
 1. The model is trained with a cross-entropy loss (30 epochs)
 2. The model is trained with a self-critical loss (30+ epochs)
 
-Training hyperparameters may be accessed with `python main.py --help`. 
+Training hyperparameters may be accessed with `python train.py --help`. 
 
 For example, the following command trains with cross-entropy:
 ```bash 
