@@ -23,7 +23,7 @@ To clone this repository with submodules, use:
   *  Run `download.sh` in `data/captions`
 * Preprocess captions for training (part 1): 
   * Download `spacy` English tokenizer with `python -m spacy download en`
-  * First, convert the text into tokens: `scripts/prepro\_text.py`
+  * First, convert the text into tokens: `cd scripts && python prepro_text.py`
   * Next, preprocess the tokens into a vocabulary (and map infrequent words to an `UNK` token) with the following command. Note that image/vocab information is stored in `data/paratalk.json` and caption data is stored in `data/paratalk\_label.h5`
 ```bash
 python scripts/prepro_labels.py --input_json data/captions/para_karpathy_format.json --output_json data/paratalk.json --output_h5 data/paratalk
