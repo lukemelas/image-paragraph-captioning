@@ -20,10 +20,10 @@ To clone this repository with submodules, use:
 #### Download and preprocess cations
 
 * Download captions:
-  *  Run `download.sh` in `data/raw_captions`
+  *  Run `download.sh` in `data/captions`
 * Preprocess captions for training (part 1): 
   * Download `spacy` English tokenizer with `python -m spacy download en`
-  * First, convert the text into tokens: 'scripts/prepro\_text.py'
+  * First, convert the text into tokens: `cd scripts && python prepro_text.py`
   * Next, preprocess the tokens into a vocabulary (and map infrequent words to an `UNK` token) with the following command. Note that image/vocab information is stored in `data/paratalk.json` and caption data is stored in `data/paratalk\_label.h5`
 ```bash
 python scripts/prepro_labels.py --input_json data/captions/para_karpathy_format.json --output_json data/paratalk.json --output_h5 data/paratalk
@@ -50,7 +50,7 @@ As explained in [Self-Critical Sequence Training](https://arxiv.org/abs/1612.005
 1. The model is trained with a cross-entropy loss (30 epochs)
 2. The model is trained with a self-critical loss (30+ epochs)
 
-Training hyperparameters may be accessed with `python main.py --help`. 
+Training hyperparameters may be accessed with `python train.py --help`. 
 
 For example, the following command trains with cross-entropy:
 ```bash 
