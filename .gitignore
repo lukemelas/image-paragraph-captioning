@@ -5,6 +5,10 @@
 *.p
 *.pyc
 *.out
+*.zip
+*.pth
+*.pkl
 __pycache__/
 log*
 copies/
+data/

@@ -113,6 +113,8 @@ def parse_opt():
                     help='an id identifying this run/job. used in cross-val and appended when writing progress files')
     parser.add_argument('--train_only', type=int, default=0,
                     help='if true then use 80k, else use 110k')
+    parser.add_argument('--print_freq', type=int, default=100,
+                    help='print training loss after this many epochs')
 
     # SCST Reward
     parser.add_argument('--cider_reward_weight', type=float, default=1,
