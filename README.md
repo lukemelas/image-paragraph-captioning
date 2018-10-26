@@ -78,7 +78,7 @@ In case you would like to cite our paper/code (no obligation at all):
   journal={EMNLP},
   year={2018}
 }     
-
+```
 And Ruotian Luo's code, on which this repo is built:
 ```
 @article{luo2018discriminability,
