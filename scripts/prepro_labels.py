@@ -116,7 +116,11 @@ def main(params):
   imgs = json.load(open(params['input_json'], 'r'))
   imgs = imgs['images']
 
-  seed(123) # make reproducible
+  # remove 2 entries for which we do not have images
+  imgs = [x for x in imgs if x['id'] not in [2346046, 2341671]]
+
+  # make reproducible
+  seed(123) 
   
   # create the vocab
   vocab = build_vocab(imgs, params)
@@ -152,8 +156,6 @@ def main(params):
 
     out['images'].append(jimg)
   
-  # remove 2 entries for which we do not have images
-  out['images'] = [x for x in out['images'] if x['id'] not in [2346046, 2341671]]
   json.dump(out, open(params['output_json'], 'w'))
   print('wrote ', params['output_json'])
 
