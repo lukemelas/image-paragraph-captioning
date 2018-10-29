@@ -69,6 +69,9 @@ mkdir log_sc
 ./train_xe.sh 
 ```
 
+### Pretrained Network
+You can download a pretrained captioning model [here](https://www.dropbox.com/s/ls9hupvzbg93c8r/topdown_sc_alpha_2.0.zip). 
+
 ### Citation
 In case you would like to cite our paper/code (no obligation at all): 
 ```
