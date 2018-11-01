@@ -38,7 +38,7 @@ python scripts/prepro_ngrams.py --input_json data/captions/para_karpathy_format.
 ```
 * Extract image features using an object detector
   * We make pre-processed features widely available:
-    * Download and extract `parabu_fc` and `parabu_att` from [here](https://drive.google.com/drive/folders/1lgdHmU6osXt4BObnhHS6tPqnkedwnHLD?usp=sharing) into `data/bu_data` 
+    * Download and extract `parabu_fc` and `parabu_att` from [here](https://drive.google.com/drive/folders/1-NRSGJw8JYdEJBJuCLlqbemYiUlbi5Xn) into `data/bu_data` 
   * Or generate the features yourself:
     * Download the [Visual Genome Dataset](https://visualgenome.org/api/v0/api_home.html)
     * Apply the bottom-up attention object detector [here](https://github.com/peteanderson80/bottom-up-attention) made by Peter Anderson.
