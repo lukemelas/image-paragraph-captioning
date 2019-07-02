@@ -38,7 +38,7 @@ def get_self_critical_reward(model, fc_feats, att_feats, att_masks, data, gen_re
     # get greedy decoding baseline
     model.eval()
     with torch.no_grad():
-        greedy_res, _ = model(fc_feats, att_feats, att_masks=att_masks, mode='sample')
+        greedy_res, _ = model(fc_feats, att_feats, att_masks=att_masks, mode='sample', opt={"block_trigrams": opt.block_trigrams})
     model.train()
 
     res = OrderedDict()
